@@ -10,7 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <Folder Include="Core\Data\" />
+    <Folder Include="Resources\Database\" />
+    <Folder Include="Resources\Extensions\" />
+    <Folder Include="Resources\Datatypes\" />
   </ItemGroup>
 
 </Project>

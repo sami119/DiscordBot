@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingBot", "CodingBot\CodingBot.csproj", "{4A5D10BE-8ECC-4517-ACC6-677F6173314D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingBot", "CodingBot\CodingBot.csproj", "{F8B0E85C-88D3-4D93-9867-DE3C19FCC20C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4A5D10BE-8ECC-4517-ACC6-677F6173314D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A5D10BE-8ECC-4517-ACC6-677F6173314D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A5D10BE-8ECC-4517-ACC6-677F6173314D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A5D10BE-8ECC-4517-ACC6-677F6173314D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B0E85C-88D3-4D93-9867-DE3C19FCC20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B0E85C-88D3-4D93-9867-DE3C19FCC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B0E85C-88D3-4D93-9867-DE3C19FCC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B0E85C-88D3-4D93-9867-DE3C19FCC20C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {466352CA-AED1-445F-80A9-2058D150A0B1}
+		SolutionGuid = {42005295-E193-491F-A588-A5DB57C7E0CE}
 	EndGlobalSection
 EndGlobal

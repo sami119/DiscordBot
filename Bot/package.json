@@ -1,8 +1,0 @@
-{
-“name”: “CodingBot”,
-“version”: “1.0.0”,
-“description”: “un coding project for un coding server”,
-“main”: “bot.js”,
-“author”: “sami119”,
-“dependencies”: {}
-}

@@ -17,7 +17,7 @@ namespace CodingBot
         private DiscordSocketClient Client;
         private CommandService Commands;
 
-        static void Main(string[] args) 
+        static void Main(string[] args)
         => new Program().MainAsync().GetAwaiter().GetResult();
 
         private async Task MainAsync()
@@ -38,15 +38,16 @@ namespace CodingBot
             Client.MessageReceived += Client_MessageRecieved;
             await Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
-            Client.Ready += Client_Ready;
             Client.Log += Client_Log;
-
+            Client.Ready += Client_Ready;
+            
             string Token = "";
-            using (var Stream = new FileStream((Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Replace(@"bin\Debug\netcoreapp2.0", @"Data\Token.txt"), FileMode.Open, FileAccess.Read))
+            using (var Stream = new FileStream((Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Replace(@"bin\Debug\netcoreapp2.1", @"Data\Token.txt"), FileMode.Open, FileAccess.Read))
             using (var ReadToken = new StreamReader(Stream))
             {
                 Token = ReadToken.ReadToEnd();
             }
+
             await Client.LoginAsync(TokenType.Bot, Token);
             await Client.StartAsync();
 
@@ -60,12 +61,25 @@ namespace CodingBot
 
         private async Task Client_Ready()
         {
-            await Client.SetGameAsync("Looking for t {message}", "https://www.google.com/", StreamType.NotStreaming);
+            await Client.SetGameAsync("Looking for !message", null, StreamType.NotStreaming);
         }
 
-        private async Task Client_MessageRecieved(SocketMessage arg)
+        private async Task Client_MessageRecieved(SocketMessage msg)
         {
-            //Configure the commands
+            var Message = msg as SocketUserMessage;
+            var Context = new SocketCommandContext(Client, Message);
+
+            if (Context.Message == null || Context.Message.Content == "") return;
+            if (Context.User.IsBot) return;
+
+            int ArgPos = 0;
+            if (!(Message.HasStringPrefix("!", ref ArgPos) || Message.HasMentionPrefix(Client.CurrentUser, ref ArgPos))) return;
+
+            var Result = await Commands.ExecuteAsync(Context, ArgPos);
+            if (!Result.IsSuccess)
+            {
+                Console.WriteLine($"{DateTime.Now} at Commands] Something went wrong with executing command. Text: {Context.Message.Content} | Error {Result.ErrorReason}");
+            }
         }
     }
 }
