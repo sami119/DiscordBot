@@ -20,9 +20,9 @@ namespace CodingBot.Core.Commands
         public async Task Embed()
         {
             EmbedBuilder Embed = new EmbedBuilder();
-            Embed.WithAuthor($"{Context.User}", Context.User.GetAvatarUrl());
+            Embed.WithAuthor($"{Context.Client}", Context.Guild.IconId);
             Embed.WithColor(40, 200, 150);
-            Embed.WithFooter("The Footer", Context.Guild.Owner.GetAvatarUrl());
+            Embed.WithFooter("The Footer");
             Embed.WithDescription("A dummy description.\n"
                 + "[search for info](https://www.google.com/)");
             await Context.Channel.SendMessageAsync("", false, Embed.Build());
