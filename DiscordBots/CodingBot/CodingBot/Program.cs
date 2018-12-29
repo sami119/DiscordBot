@@ -29,6 +29,7 @@ namespace CodingBot
         //Main async func used for Tasks
         private async Task MainAsync()
         {
+            //Reads the json file
             string JSON = "";
             string SettingsLocation = @"D:\My-Zone\IT-Zone\Repos\Projects\DiscordBots\CodingBot\CodingBot\Data\Settings.json";
             using (var Stream = new FileStream(SettingsLocation, FileMode.Open, FileAccess.Read))
@@ -38,6 +39,7 @@ namespace CodingBot
             }
             Settings settings = JsonConvert.DeserializeObject<Settings>(JSON);
 
+            //Saves the Json file into the ESetings class for future use
             ESettings.banned = settings.banned;
             ESettings.log = settings.log;
             ESettings.owner = settings.owner;
@@ -62,16 +64,19 @@ namespace CodingBot
 
             //Handles The recieved messages
             Client.MessageReceived += Client_MessageRecieved;
+
             //If is not here some of the commands can not work
             await Commands.AddModulesAsync(Assembly.GetEntryAssembly());
 
             //Handles the ClientLog
             Client.Log += Client_Log;
+
             //Handles the GameLog
             Client.Ready += Client_Ready;
 
             //Logs the client
             await Client.LoginAsync(TokenType.Bot, ESettings.token);
+
             //starts the conection
             await Client.StartAsync();
 
@@ -116,6 +121,7 @@ namespace CodingBot
 
             //Checs if the Message is null or the message content is "" and returns noting
             if (Context.Message == null || Context.Message.Content == "") return;
+
             //Cheks if the user is Bot and returns noting
             if (Context.User.IsBot) return;
 

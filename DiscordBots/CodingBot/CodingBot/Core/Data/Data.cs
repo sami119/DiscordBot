@@ -23,8 +23,18 @@ namespace CodingBot.Core.Data
                 {
                     return 0;
                 }
+
                 //returns the amount pf messages of that user in the database
                 return DbContext.spam.Where(x => x.UserId == UserId).Select(x => x.MessagesSend).FirstOrDefault();
+            }
+        }
+
+        public static List<Spam> GetTop3Spams()
+        {
+            using (var DbContext = new SqliteDbContext())
+            {
+                List<Spam> spam = DbContext.spam.OrderByDescending(x => x.MessagesSend).Take(3).ToList();
+                return spam;
             }
         }
 

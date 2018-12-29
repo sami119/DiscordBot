@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 
 using CodingBot.Resources.Database;
+using System.Collections.Generic;
 
 namespace CodingBot.Core.Commands
 {
@@ -39,6 +40,27 @@ namespace CodingBot.Core.Commands
             public async Task Me()
             {
                 await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, we noticed that you have spamed {Data.Data.GetMessagesAmount(Context.User.Id)} messages");
+            }
+
+            [Command(""), Summary("Returns how many messages given User sent")]
+            public async Task User(SocketUser user)
+            {
+                try
+                {
+                    //Checks
+                    if (user.IsBot)
+                    {
+                        await Context.Channel.SendMessageAsync(":x: Bots messages are not caunted!");
+                        return;
+                    }
+
+                    //Execute
+                    await Context.Channel.SendMessageAsync($"User {user.Username} has sended {Data.Data.GetMessagesAmount(user.Id)} messages");
+                }
+                catch
+                {
+                    await Context.Channel.SendMessageAsync("The given username doesnt exists!");
+                }
             }
 
             //spam reset, spam res command
@@ -76,12 +98,25 @@ namespace CodingBot.Core.Commands
                 }
             }
 
-            ////spam leaderboard command
-            //[Command("leaderboard"), Summary("Returns the top 3 spamers")]
-            //public async Task Leaderboard()
-            //{
-            //    await Context.Channel.SendMessageAsync("");
-            //}
+            //spam leaderboard command
+            [Command("leaderboard"), Summary("Returns the top 3 spamers")]
+            public async Task Leaderboard()
+            {
+                List<Spam> spam = Data.Data.GetTop3Spams();
+                Spam firstSpam = spam[0];
+                Spam secondSpam = spam[1];
+                Spam thirdSpam = spam[2];
+
+                EmbedBuilder Embed = new EmbedBuilder();
+                Embed.WithAuthor("Spam LeaderBoard");
+                Embed.WithDescription("Here is the list of top 3 spammers");
+                Embed.WithColor(0, 128, 255);
+                Embed.AddField($"1st Spammer - {firstSpam.Name}", $"with {firstSpam.MessagesSend} messages sent.");
+                Embed.AddField($"2nd Spammer - {secondSpam.Name}", $"with {secondSpam.MessagesSend} messages sent.");
+                Embed.AddField($"3rd Spammer - {thirdSpam.Name}", $"with {thirdSpam.MessagesSend} messages sent.");
+                Embed.WithFooter("Made by sami119 and theBug");
+                await Context.Channel.SendMessageAsync("", false, Embed.Build());
+            }
         }
     }
 }
