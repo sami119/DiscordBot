@@ -2,11 +2,16 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Reflection;
-using CodingBot.Core.Data;
+using System.Linq;
 
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
+
+using CodingBot.Core.Data;
+using CodingBot.Resources.Datatypes;
+
+using Newtonsoft.Json;
 
 namespace CodingBot
 {
@@ -24,11 +29,26 @@ namespace CodingBot
         //Main async func used for Tasks
         private async Task MainAsync()
         {
+            string JSON = "";
+            string SettingsLocation = @"D:\My-Zone\IT-Zone\Repos\Projects\DiscordBots\CodingBot\CodingBot\Data\Settings.json";
+            using (var Stream = new FileStream(SettingsLocation, FileMode.Open, FileAccess.Read))
+            using (var ReadSettings = new StreamReader(Stream))
+            {
+                JSON = ReadSettings.ReadToEnd();
+            }
+            Settings settings = JsonConvert.DeserializeObject<Settings>(JSON);
+
+            ESettings.banned = settings.banned;
+            ESettings.log = settings.log;
+            ESettings.owner = settings.owner;
+            ESettings.token = settings.token;
+            ESettings.version = settings.version;
+
             //Initializing our Client
             Client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 //LogLevel Config
-                LogLevel = LogSeverity.Debug
+                LogLevel = LogSeverity.Info
             });
 
             //Initializing our CommandService
@@ -49,17 +69,9 @@ namespace CodingBot
             Client.Log += Client_Log;
             //Handles the GameLog
             Client.Ready += Client_Ready;
-            
-            //Unique Token
-            string Token = "";
-            using (var Stream = new FileStream((Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Replace(@"bin\Debug\netcoreapp2.1", @"Data\Token.txt"), FileMode.Open, FileAccess.Read))
-            using (var ReadToken = new StreamReader(Stream))
-            {
-                Token = ReadToken.ReadToEnd();
-            }
 
             //Logs the client
-            await Client.LoginAsync(TokenType.Bot, Token);
+            await Client.LoginAsync(TokenType.Bot, ESettings.token);
             //starts the conection
             await Client.StartAsync();
 
@@ -71,6 +83,13 @@ namespace CodingBot
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source} - {Message.Message}");
+            try
+            {
+                SocketGuild guild = Client.Guilds.Where(x => x.Id == ESettings.log[0]).FirstOrDefault();
+                SocketTextChannel channel = guild.Channels.Where(x => x.Id == ESettings.log[1]).FirstOrDefault() as SocketTextChannel;
+                await channel.SendMessageAsync($"{DateTime.Now} at {Message.Source} - {Message.Message}");
+            }
+            catch{}
         }
 
         //Here is the GameLog Message
@@ -82,10 +101,12 @@ namespace CodingBot
         // Here is the MessageRecieved Log
         private async Task Client_MessageRecieved(SocketMessage msg)
         {
+
             //initializing the Message and the SocketCommandContext
             var Message = msg as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
+           
             //Cheks if the User is not bot and Saves the MessageAmmount
             if (!Context.User.IsBot)
             {
@@ -104,6 +125,15 @@ namespace CodingBot
 
             //Returns the Result if is Succes
             var Result = await Commands.ExecuteAsync(Context, ArgPos);
+
+            //try
+            //{
+            //    SocketGuild guild = Client.Guilds.Where(x => x.Id == ESettings.log[0]).FirstOrDefault();
+            //    SocketTextChannel channel = guild.Channels.Where(x => x.Id == ESettings.log[1]).FirstOrDefault() as SocketTextChannel;
+            //    await channel.SendMessageAsync($"{DateTime.Now} at Commands - Something went wrong with executing command | Text: {Context.Message.Content} | Error {Result.ErrorReason}");
+            //}
+            //catch { }
+
             if (!Result.IsSuccess)
             {
                 Console.WriteLine($"{DateTime.Now} at Commands - Something went wrong with executing command | Text: {Context.Message.Content} | Error {Result.ErrorReason}");

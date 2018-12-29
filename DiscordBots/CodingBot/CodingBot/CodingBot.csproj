@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Extensions\" />
-    <Folder Include="Resources\Datatypes\" />
   </ItemGroup>
 
 </Project>

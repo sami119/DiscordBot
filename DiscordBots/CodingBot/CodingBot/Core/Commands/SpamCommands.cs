@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using CodingBot.Core.Data;
-using CodingBot.Resources.Database;
+﻿using System.Threading.Tasks;
+using System.Linq;
+
+using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
+
+using CodingBot.Resources.Database;
 
 namespace CodingBot.Core.Commands
 {
@@ -14,11 +15,65 @@ namespace CodingBot.Core.Commands
         [Group("spam"), Summary("Group to manage the spam commands")]
         public class SpamGroup : ModuleBase<SocketCommandContext>
         {
+            //spam info command
+            [Command("info"), Summary("Returns the spam info")]
+            public async Task Info()
+            {
+                //Makes the Embed
+                EmbedBuilder Embed = new EmbedBuilder();
+                Embed.WithAuthor("Spam Info");
+                Embed.WithDescription("Hi I am CodingBot\n"
+                    + "This is a list of my spam commands");
+                Embed.WithColor(0, 128, 255);
+                Embed.WithThumbnailUrl("https://cdn.discordapp.com/attachments/498614023168720916/506142446246166538/-.jpg");
+                Embed.AddField("!spam, !spam me", "Returns the amount of messages you sent.");
+                Embed.AddField("!spam res, !spam reset", "Resets the amount of messages you sent.");
+                Embed.AddField("!...", "Some description");
+                Embed.AddField("!...", "Some description");
+                Embed.WithFooter("Made by sami119 and theBug"); ;
+                await Context.Channel.SendMessageAsync("", false, Embed.Build());
+            }
+
             //spam me, spam command
             [Command(""), Alias("me"), Summary("Returns how many messages i sent")]
             public async Task Me()
             {
-                await Context.Channel.SendMessageAsync($"Hey {Context.User}, we notice that you have spamed {Data.Data.GetMessagesAmount(Context.User.Id)} messages");
+                await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, we noticed that you have spamed {Data.Data.GetMessagesAmount(Context.User.Id)} messages");
+            }
+
+            //spam reset, spam res command
+            [Command("reset"), Alias("res"), Summary("Resets the database")]
+            public async Task Res(IUser user = null)
+            {
+                //Checks
+                if(user == null)
+                {
+                    await Context.Channel.SendMessageAsync(":x: You need to tell me which user's data you want to reset");
+                    return;
+                }
+
+                if (user.IsBot)
+                {
+                    await Context.Channel.SendMessageAsync(":x: Bots can't be reset");
+                    return;
+                }
+
+                SocketGuildUser User1 = Context.User as SocketGuildUser;
+                if (!User1.GuildPermissions.Administrator)
+                {
+                    await Context.Channel.SendMessageAsync(":x: You dont have administrator rights to use this command");
+                    return;
+                }
+
+                //Execution
+                await Context.Channel.SendMessageAsync($"{user.Mention}, your message amount has been reset by {Context.User.Username}!");
+
+                //Save the Data
+                using(var DbContext = new SqliteDbContext())
+                {
+                    DbContext.spam.RemoveRange(DbContext.spam.Where(x=>x.UserId == user.Id));
+                    await DbContext.SaveChangesAsync();
+                }
             }
 
             ////spam leaderboard command
