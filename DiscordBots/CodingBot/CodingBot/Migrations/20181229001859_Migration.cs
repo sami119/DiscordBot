@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿//generated code
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CodingBot.Migrations
 {

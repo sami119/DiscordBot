@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CodingBot.Resources.Database
 {
+    //Makes the spam table
     public class Spam
     {
         [Key]

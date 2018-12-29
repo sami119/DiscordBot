@@ -10,10 +10,11 @@ namespace CodingBot.Resources.Database
     {
         public DbSet<Spam> spam { get; set; }
 
+        //overides the onconfiguring method
         protected override void OnConfiguring(DbContextOptionsBuilder Options)
         {
-            string DbLocation = Assembly.GetEntryAssembly().Location.Replace(@"bin\Debug\netcoreapp2.1", @"Data\");
-            Options.UseSqlite($"Data Source={DbLocation}Database.sqlite");
+            //Uses the database we have
+            Options.UseSqlite(@"Data Source=D:\My-Zone\IT-Zone\Repos\Projects\DiscordBots\CodingBot\CodingBot\Data\Database.sqlite");
         }
     }
 }
