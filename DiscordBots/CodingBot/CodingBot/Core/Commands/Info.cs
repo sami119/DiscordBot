@@ -13,18 +13,17 @@ namespace CodingBot.Core.Commands
         [Command("info"), Summary("Info command")]
         public async Task info()
         {
-            await Context.Channel.SendMessageAsync("Hello I am CodingBot\nI was created by Sami119 and theBug\nHere is list of my commands\n!info - displays info of all my commands");
-        }
-
-        [Command("embed"), Summary("Test command")]
-        public async Task Embed()
-        {
             EmbedBuilder Embed = new EmbedBuilder();
-            Embed.WithAuthor($"{Context.Client}", Context.Guild.IconId);
-            Embed.WithColor(40, 200, 150);
-            Embed.WithFooter("The Footer");
-            Embed.WithDescription("A dummy description.\n"
-                + "[search for info](https://www.google.com/)");
+            Embed.WithAuthor("Info");
+            Embed.WithDescription("Hi I am CodingBot\n"
+                + "I can help you with:");
+            Embed.WithColor(0, 128, 255);
+            Embed.WithThumbnailUrl("https://cdn.discordapp.com/attachments/498614023168720916/506142446246166538/-.jpg");
+            Embed.AddField("!info", "Gives you a list of commands i support");
+            Embed.AddField("!...", "Some description");
+            Embed.AddField("!...", "Some description");
+            Embed.AddField("!...", "Some description");
+            Embed.WithFooter("Made by sami119 and theBug"); ;
             await Context.Channel.SendMessageAsync("", false, Embed.Build());
         }
     }

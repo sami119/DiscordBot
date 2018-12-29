@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Reflection;
+using CodingBot.Core.Data;
 
 using Discord;
 using Discord.WebSocket;
@@ -61,7 +62,7 @@ namespace CodingBot
 
         private async Task Client_Ready()
         {
-            await Client.SetGameAsync("Looking for !message", null, StreamType.NotStreaming);
+            await Client.SetGameAsync("Looking for !info", null, StreamType.NotStreaming);
         }
 
         private async Task Client_MessageRecieved(SocketMessage msg)
@@ -80,6 +81,15 @@ namespace CodingBot
             {
                 Console.WriteLine($"{DateTime.Now} at Commands] Something went wrong with executing command. Text: {Context.Message.Content} | Error {Result.ErrorReason}");
             }
+        }
+
+        //Work on this
+        private async Task Save(SocketMessage msg)
+        {
+            var Message = msg as SocketUserMessage;
+            var Context = new SocketCommandContext(Client, Message);
+
+            await Data.SaveMessagesAmount(Context.User.Id, 1);
         }
     }
 }
