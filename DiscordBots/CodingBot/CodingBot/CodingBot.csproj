@@ -16,8 +16,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\Extensions\" />
-  </ItemGroup>
-
 </Project>

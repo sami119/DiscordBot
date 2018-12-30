@@ -111,7 +111,7 @@ namespace CodingBot
             var Message = msg as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-           
+            //could just wrap it in an unawaited Task.Run
             //Cheks if the User is not bot and Saves the MessageAmmount
             if (!Context.User.IsBot)
             {
@@ -131,14 +131,6 @@ namespace CodingBot
 
             //Returns the Result if is Succes
             var Result = await Commands.ExecuteAsync(Context, ArgPos);
-
-            //try
-            //{
-            //    SocketGuild guild = Client.Guilds.Where(x => x.Id == ESettings.log[0]).FirstOrDefault();
-            //    SocketTextChannel channel = guild.Channels.Where(x => x.Id == ESettings.log[1]).FirstOrDefault() as SocketTextChannel;
-            //    await channel.SendMessageAsync($"{DateTime.Now} at Commands - Something went wrong with executing command | Text: {Context.Message.Content} | Error {Result.ErrorReason}");
-            //}
-            //catch { }
 
             if (!Result.IsSuccess)
             {

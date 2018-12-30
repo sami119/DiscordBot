@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
+using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 using CodingBot.Resources.Datatypes;
 
@@ -19,7 +21,7 @@ namespace CodingBot.Core.Moderation
         public async Task Reload()
         {
             //Checks
-            if(Context.User.Id != ESettings.owner)
+            if (Context.User.Id != ESettings.owner)
             {
                 await Context.Channel.SendMessageAsync(":x: You are not the owner.");
                 return;
@@ -51,6 +53,24 @@ namespace CodingBot.Core.Moderation
             ESettings.version = settings.version;
 
             await Context.Channel.SendMessageAsync(":white_check_mark: All settings were updated succesfully!");
+        }
+
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireBotPermission(GuildPermission.KickMembers)]
+        [Command("kick", RunMode = RunMode.Async), Summary("Kicks the given user.")]
+        public async Task Kick(SocketGuildUser user, [Remainder] string reason)
+        {
+            //Checks
+            SocketGuildUser User1 = Context.User as SocketGuildUser;
+            if (user.IsBot)
+            {
+                await Context.Channel.SendMessageAsync(":x: You cannot kick bot!");
+                return;
+            }
+
+            //Execute
+            await Context.Guild.GetTextChannel(528599481508167695).SendMessageAsync($"{user.Username} was kicked by {User1.Username} for {reason}");
+            await user.KickAsync(reason);
         }
     }
 }

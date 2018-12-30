@@ -13,7 +13,7 @@ namespace CodingBot.Core.Commands
         [Command("hello"), Alias("hi", "Hello", "Hi"), Summary("Says Hello")]
         public async Task Hello()
         {
-            await Context.Channel.SendMessageAsync($"Hello {Context.User.Mention}");
+            await Context.Channel.SendMessageAsync($"Hello {Context.User.Mention}, how can i help you? If yo want list with my commands say !help.");
         }
     }
 }
