@@ -17,16 +17,12 @@ namespace CodingBot.Core.Moderation
 {
     public class Moderation : ModuleBase<SocketCommandContext>
     {
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireOwner()]
         [Command("reload"), Summary("Reload the settings.json file while the bot is running")]
         public async Task Reload()
         {
             //Checks
-            if (Context.User.Id != ESettings.owner)
-            {
-                await Context.Channel.SendMessageAsync(":x: You are not the owner.");
-                return;
-            }
-
             string SettingsLocation = @"D:\My-Zone\IT-Zone\Repos\Projects\DiscordBots\CodingBot\CodingBot\Data\Settings.json";
             if (!File.Exists(SettingsLocation))
             {
@@ -69,7 +65,7 @@ namespace CodingBot.Core.Moderation
             }
 
             //Execute
-            await Context.Guild.GetTextChannel(528599481508167695).SendMessageAsync($"{user.Username} was kicked by {User1.Username} for {reason}");
+            await Context.Guild.GetTextChannel(528599481508167695).SendMessageAsync($"{user.Username} was kicked by {User1.Username} {reason}");
             await user.KickAsync(reason);
         }
     }

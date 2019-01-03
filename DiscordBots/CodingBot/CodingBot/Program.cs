@@ -111,7 +111,6 @@ namespace CodingBot
             var Message = msg as SocketUserMessage;
             var Context = new SocketCommandContext(Client, Message);
 
-            //could just wrap it in an unawaited Task.Run
             //Cheks if the User is not bot and Saves the MessageAmmount
             if (!Context.User.IsBot)
             {
