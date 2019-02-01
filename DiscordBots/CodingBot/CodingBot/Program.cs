@@ -88,13 +88,13 @@ namespace CodingBot
         private async Task Client_Log(LogMessage Message)
         {
             Console.WriteLine($"{DateTime.Now} at {Message.Source} - {Message.Message}");
-            try
-            {
-                SocketGuild guild = Client.Guilds.Where(x => x.Id == ESettings.log[0]).FirstOrDefault();
-                SocketTextChannel channel = guild.Channels.Where(x => x.Id == ESettings.log[1]).FirstOrDefault() as SocketTextChannel;
-                await channel.SendMessageAsync($"{DateTime.Now} at {Message.Source} - {Message.Message}");
-            }
-            catch{}
+            //try
+            //{
+            //    SocketGuild guild = Client.Guilds.Where(x => x.Id == ESettings.log[0]).FirstOrDefault();
+            //    SocketTextChannel channel = guild.Channels.Where(x => x.Id == ESettings.log[1]).FirstOrDefault() as SocketTextChannel;
+            //    await channel.SendMessageAsync($"{DateTime.Now} at {Message.Source} - {Message.Message}");
+            //}
+            //catch{}
         }
 
         //Here is the GameLog Message
